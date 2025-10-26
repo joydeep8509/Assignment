@@ -1,213 +1,265 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 
-export default function PortfolioAssignment() {
+const PortfolioAssignment = () => {
   const [activeTab, setActiveTab] = useState('about');
   const [images, setImages] = useState([
     'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop',
-    'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=400&h=300&fit=crop',
+    'https://images.unsplash.com/photo-1618172193622-ae2d025f4032?w=400&h=300&fit=crop',
     'https://images.unsplash.com/photo-1618556450994-a6a128ef0d9d?w=400&h=300&fit=crop'
   ]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const aboutContent = `Hello! I'm Dave, your sales rep here from Salesforce. I've been working at this awesome company for 3 years now.
-
-I was born and raised in Albany, NY & have been living in Santa Carla for the past 10 years my wife Tiffany and my 4 year old twin daughters- Emma and Ella. Both of them are just starting school, so my calender is usually blocked between 9-10 AM. This is a...`;
-
-  const experiencesContent = `I have over 3 years of experience in sales at Salesforce, specializing in enterprise solutions and customer relationship management. 
-
-My expertise includes:
-• Enterprise Software Sales
-• Customer Success Management
-• Team Leadership & Training
-• Strategic Account Planning
-
-Prior to Salesforce, I worked in tech sales for 5 years, consistently exceeding quotas and building lasting client relationships.`;
-
-  const recommendedContent = `Recommended Tools & Resources:
-
-• Salesforce CRM Platform
-• LinkedIn Sales Navigator
-• Slack for Team Communication
-• Zoom for Virtual Meetings
-• HubSpot Sales Hub
-
-I highly recommend these tools for anyone in sales or customer success roles. They've been instrumental in my success over the years.`;
-
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-
-  const handleNextImage = () => {
-    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
 
   const handleAddImage = () => {
-    const newImageUrl = prompt('Enter image URL:');
-    if (newImageUrl) {
-      setImages([...images, newImageUrl]);
-    }
+    const randomId = Math.floor(Math.random() * 1000);
+    const newImage = `https://images.unsplash.com/photo-161800000000${randomId}?w=400&h=300&fit=crop`;
+    setImages([...images, newImage]);
   };
 
-  const getContent = () => {
-    switch (activeTab) {
-      case 'about':
-        return aboutContent;
-      case 'experiences':
-        return experiencesContent;
-      case 'recommended':
-        return recommendedContent;
-      default:
-        return aboutContent;
+  const scrollGallery = (direction) => {
+    const gallery = document.getElementById('gallery-container');
+    const scrollAmount = 320;
+    if (gallery) {
+      gallery.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-          {/* Left Side - Empty Space (as per requirements) */}
-          <div className="hidden lg:block"></div>
+    <>
+      <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+        rel="stylesheet"
+      />
+      
+      <div className="container-fluid vh-100 bg-dark text-light p-0">
+        <div className="row g-0 h-100">
 
-          {/* Right Side - Two Widgets */}
-          <div className="space-y-6">
-            {/* Widget 1: About Me / Experiences / Recommended */}
-            <div className="bg-gray-800 rounded-3xl shadow-2xl overflow-hidden">
-              {/* Help Icon */}
-              <div className="flex justify-between items-start p-6 pb-0">
-                <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-600 cursor-pointer transition-colors">
-                  ?
+          {/* Left Side - Empty Space */}
+          <div className="col-12 col-lg-5 bg-dark"></div>
+
+          {/* Right Side - Portfolio Widgets */}
+          <div className="col-12 col-lg-7 p-4 d-flex flex-column justify-content-center align-items-center gap-4">
+            
+            {/* About Me Widget */}
+            <div className="card bg-dark border-0 shadow-lg w-100" style={{ maxWidth: '720px', borderRadius: '20px' }}>
+              <div className="card-body p-0">
+                {/* Tabs */}
+                <div className="d-flex bg-black rounded-top" style={{ borderRadius: '20px 20px 0 0' }}>
+                  <button
+                    className={`btn flex-fill py-3 fw-semibold ${activeTab === 'about' ? 'bg-secondary text-white' : 'bg-transparent text-secondary'}`}
+                    style={{ 
+                      borderRadius: '20px 0 0 0',
+                      border: 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onClick={() => setActiveTab('about')}
+                  >
+                    About Me
+                  </button>
+                  <button
+                    className={`btn flex-fill py-3 fw-semibold ${activeTab === 'experiences' ? 'bg-secondary text-white' : 'bg-transparent text-secondary'}`}
+                    style={{ 
+                      border: 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onClick={() => setActiveTab('experiences')}
+                  >
+                    Experiences
+                  </button>
+                  <button
+                    className={`btn flex-fill py-3 fw-semibold ${activeTab === 'recommended' ? 'bg-secondary text-white' : 'bg-transparent text-secondary'}`}
+                    style={{ 
+                      borderRadius: '0 20px 0 0',
+                      border: 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onClick={() => setActiveTab('recommended')}
+                  >
+                    Recommended
+                  </button>
                 </div>
-              </div>
 
-              {/* Tabs */}
-              <div className="flex gap-2 px-6 pt-4">
-                <button
-                  onClick={() => setActiveTab('about')}
-                  className={`px-8 py-3 rounded-2xl font-medium transition-all ${
-                    activeTab === 'about'
-                      ? 'bg-gray-900 text-white shadow-lg'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-700'
-                  }`}
-                >
-                  About Me
-                </button>
-                <button
-                  onClick={() => setActiveTab('experiences')}
-                  className={`px-8 py-3 rounded-2xl font-medium transition-all ${
-                    activeTab === 'experiences'
-                      ? 'bg-gray-900 text-white shadow-lg'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-700'
-                  }`}
-                >
-                  Experiences
-                </button>
-                <button
-                  onClick={() => setActiveTab('recommended')}
-                  className={`px-8 py-3 rounded-2xl font-medium transition-all ${
-                    activeTab === 'recommended'
-                      ? 'bg-gray-900 text-white shadow-lg'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-700'
-                  }`}
-                >
-                  Recommended
-                </button>
-              </div>
-
-              {/* Content Area */}
-              <div className="p-6 pt-8">
-                <div className="bg-gray-900 rounded-2xl p-6 max-h-64 overflow-y-auto custom-scrollbar">
-                  <p className="text-gray-300 leading-relaxed whitespace-pre-line">
-                    {getContent()}
-                  </p>
+                {/* Tab Content */}
+                <div className="p-4" style={{ minHeight: '280px', maxHeight: '280px', overflowY: 'auto' }}>
+                  {activeTab === 'about' && (
+                    <div className="text-secondary">
+                      <p className="mb-3">
+                        Hello! I'm Dave, your sales rep here from Salesforce. I've been working at this 
+                        awesome company for 3 years now.
+                      </p>
+                      <p>
+                        I was born and raised in Albany, NY & have been living in Santa Carla for the past 
+                        10 years my wife Tiffany and my 4 year old twin daughters- Emma and Ella. Both of them 
+                        are just starting school, so my calender is usually blocked between 9-10 AM. This is a...
+                      </p>
+                    </div>
+                  )}
+                  
+                  {activeTab === 'experiences' && (
+                    <div className="text-secondary">
+                      <p className="mb-3">
+                        <strong>Senior Sales Executive</strong> - Salesforce (2021-Present)
+                      </p>
+                      <p className="mb-3">
+                        Led enterprise sales initiatives, managing a portfolio of Fortune 500 clients. 
+                        Achieved 150% of quota for three consecutive years.
+                      </p>
+                      <p>
+                        <strong>Sales Manager</strong> - Tech Solutions Inc. (2018-2021)
+                      </p>
+                      <p>
+                        Managed a team of 12 sales representatives, implementing strategic processes that 
+                        increased team performance by 40%.
+                      </p>
+                    </div>
+                  )}
+                  
+                  {activeTab === 'recommended' && (
+                    <div className="text-secondary">
+                      <p className="mb-3">
+                        "Dave is an exceptional sales professional who consistently exceeds expectations. 
+                        His dedication to understanding client needs is unmatched."
+                      </p>
+                      <p className="mb-2">- Sarah Johnson, VP of Sales</p>
+                      <hr className="my-3 border-secondary" />
+                      <p className="mb-3">
+                        "Working with Dave has been a pleasure. He brings energy and expertise to every 
+                        interaction."
+                      </p>
+                      <p>- Michael Chen, Director of Operations</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* Widget 2: Gallery */}
-            <div className="bg-gray-800 rounded-3xl shadow-2xl overflow-hidden">
-              {/* Help Icon and Gallery Header */}
-              <div className="flex justify-between items-center p-6">
-                <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-600 cursor-pointer transition-colors">
-                  ?
-                </div>
-                <div className="flex-1 flex justify-center">
-                  <button className="bg-gray-900 px-8 py-3 rounded-2xl font-semibold text-white shadow-lg">
-                    Gallery
-                  </button>
-                </div>
-                <div className="w-10"></div>
-              </div>
-
-              {/* Add Image Button and Navigation */}
-              <div className="flex justify-between items-center px-6 pb-4">
-                <button
-                  onClick={handleAddImage}
-                  className="flex items-center gap-2 px-6 py-2 bg-gray-900 hover:bg-gray-950 rounded-full text-white font-medium transition-all shadow-lg"
-                >
-                  <Plus size={20} />
-                  ADD IMAGE
-                </button>
-                <div className="flex gap-4">
-                  <button
-                    onClick={handlePrevImage}
-                    className="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 rounded-full flex items-center justify-center shadow-xl transition-all"
-                  >
-                    <ChevronLeft size={24} />
-                  </button>
-                  <button
-                    onClick={handleNextImage}
-                    className="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 rounded-full flex items-center justify-center shadow-xl transition-all"
-                  >
-                    <ChevronRight size={24} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Gallery Images */}
-              <div className="px-6 pb-6">
-                <div className="grid grid-cols-3 gap-4">
-                  {images.map((img, index) => (
-                    <div
-                      key={index}
-                      className={`aspect-square rounded-2xl overflow-hidden shadow-lg transition-all cursor-pointer ${
-                        index === currentImageIndex
-                          ? 'ring-4 ring-blue-500 scale-105'
-                          : 'hover:scale-105'
-                      }`}
-                      onClick={() => setCurrentImageIndex(index)}
+            {/* Gallery Widget */}
+            <div className="card bg-dark border-0 shadow-lg w-100" style={{ maxWidth: '720px', borderRadius: '20px' }}>
+              <div className="card-body p-4">
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                  <div className="d-flex align-items-center gap-2">
+                    <span className="bg-secondary rounded-circle d-inline-block" style={{ width: '8px', height: '8px' }}></span>
+                    <h5 className="mb-0 text-white fw-bold">Gallery</h5>
+                  </div>
+                  
+                  <div className="d-flex gap-3 align-items-center">
+                    <button 
+                      className="btn btn-sm text-white fw-semibold shadow-sm"
+                      style={{ 
+                        background: 'linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%)',
+                        borderRadius: '20px',
+                        padding: '8px 20px',
+                        border: 'none',
+                        fontSize: '12px'
+                      }}
+                      onClick={handleAddImage}
                     >
-                      <img
-                        src={img}
+                      + ADD IMAGE
+                    </button>
+                    
+                    <div className="d-flex gap-2">
+                      <button 
+                        className="btn btn-sm rounded-circle shadow-sm"
+                        style={{ 
+                          width: '40px', 
+                          height: '40px',
+                          background: 'linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%)',
+                          border: 'none',
+                          color: 'white'
+                        }}
+                        onClick={() => scrollGallery('left')}
+                      >
+                        ←
+                      </button>
+                      <button 
+                        className="btn btn-sm rounded-circle shadow-sm"
+                        style={{ 
+                          width: '40px', 
+                          height: '40px',
+                          background: 'linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%)',
+                          border: 'none',
+                          color: 'white'
+                        }}
+                        onClick={() => scrollGallery('right')}
+                      >
+                        →
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Gallery Images */}
+                <div 
+                  id="gallery-container"
+                  className="d-flex gap-3 overflow-auto" 
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {images.map((img, index) => (
+                    <div 
+                      key={index}
+                      className="flex-shrink-0 rounded-3 overflow-hidden shadow"
+                      style={{ 
+                        width: '190px', 
+                        height: '190px',
+                        transition: 'transform 0.3s ease',
+                        cursor: 'pointer'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                      onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                    >
+                      <img 
+                        src={img} 
                         alt={`Gallery ${index + 1}`}
-                        className="w-full h-full object-cover"
+                        className="w-100 h-100"
+                        style={{ objectFit: 'cover' }}
+                        onError={(e) => {
+                          e.target.src = 'https://via.placeholder.com/190x190/404040/ffffff?text=Image';
+                        }}
                       />
                     </div>
                   ))}
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
 
-      {/* Custom Scrollbar Styles */}
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
+      <style>{`
+        #gallery-container::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .card {
+          backdrop-filter: blur(10px);
+        }
+        
+        .btn:focus {
+          box-shadow: none !important;
+        }
+        
+        .overflow-auto::-webkit-scrollbar {
           width: 6px;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #1f2937;
+        
+        .overflow-auto::-webkit-scrollbar-track {
+          background: #1a1a1a;
           border-radius: 10px;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #4b5563;
+        
+        .overflow-auto::-webkit-scrollbar-thumb {
+          background: #404040;
           border-radius: 10px;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #6b7280;
+        
+        .overflow-auto::-webkit-scrollbar-thumb:hover {
+          background: #505050;
         }
       `}</style>
-    </div>
+    </>
   );
-}
+};
+
+export default PortfolioAssignment;
